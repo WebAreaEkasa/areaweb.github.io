@@ -67,7 +67,7 @@
     const options = new faceapi.MtcnnOptions(mtcnnParams)
     const fullFaceDescriptions = await faceapi.detectAllFaces(player, options).withFaceLandmarks().withFaceDescriptors()
 
-    const labels = ['elorriaga' 'crosetti']
+    const labels = ['elorriaga', 'crosetti']
 
     const labeledFaceDescriptors = await Promise.all(
       labels.map(async label => {

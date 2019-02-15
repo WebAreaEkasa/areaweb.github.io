@@ -27,7 +27,9 @@
 
     await faceapi.loadMtcnnModel(MODELS)
     await faceapi.loadFaceRecognitionModel(MODELS)
-	  
+    await faceapi.loadSsdMobilenetv1Model(MODEL_URL)
+    await faceapi.loadFaceLandmarkModel(MODEL_URL)
+
     
     navigator.permissions.query({name:'camera'}).then(function(result) {
       if (result.state == 'granted') {
@@ -59,10 +61,6 @@
     const mtcnnResults = await faceapi.mtcnn(player, mtcnnForwardParams);
     faceapi.drawDetection('overlay', mtcnnResults.map(res => res.faceDetection), { withScore: false })
     faceapi.drawLandmarks('overlay', mtcnnResults.map(res => res.faceLandmarks), { lineWidth: 4, color: 'red' })
-
-    const alignedFaceBoxes = results.map(
-      ({ faceLandmarks }) => faceLandmarks.align()
-    )
 
     const options = new faceapi.MtcnnOptions(mtcnnParams)
     const fullFaceDescriptions = await faceapi.detectAllFaces(player, options).withFaceLandmarks().withFaceDescriptors()

@@ -62,7 +62,7 @@
     faceapi.drawDetection('overlay', mtcnnResults.map(res => res.faceDetection), { withScore: false })
     faceapi.drawLandmarks('overlay', mtcnnResults.map(res => res.faceLandmarks), { lineWidth: 4, color: 'red' })
 
-    const options = new faceapi.MtcnnOptions(mtcnnParams)
+    const options = new faceapi.MtcnnOptions(mtcnnForwardParams)
     const fullFaceDescriptions = await faceapi.detectAllFaces(player, options).withFaceLandmarks().withFaceDescriptors()
 
     const labels = ['elorriaga', 'crosetti']

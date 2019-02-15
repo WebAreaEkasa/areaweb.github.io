@@ -27,8 +27,8 @@
 
     await faceapi.loadMtcnnModel(MODELS)
     await faceapi.loadFaceRecognitionModel(MODELS)
-    await faceapi.loadSsdMobilenetv1Model(MODEL_URL)
-    await faceapi.loadFaceLandmarkModel(MODEL_URL)
+    await faceapi.loadSsdMobilenetv1Model(MODELS)
+    await faceapi.loadFaceLandmarkModel(MODELS)
 
     
     navigator.permissions.query({name:'camera'}).then(function(result) {

@@ -1,113 +1,84 @@
+$(document).ready(function() {
+     
+  run1()
+})
 
-  $(document).ready(function() {
-    run()
-  })
-  
-  const mtcnnForwardParams = {
-    // number of scaled versions of the input image passed through the CNN
-    // of the first stage, lower numbers will result in lower inference time,
-    // but will also be less accurate
-    maxNumScales: 10,
-    // scale factor used to calculate the scale steps of the image
-    // pyramid used in stage 1
-    scaleFactor: 0.709,
-    // the score threshold values used to filter the bounding
-    // boxes of stage 1, 2 and 3
-    scoreThresholds: [0.6, 0.7, 0.7],
-    // mininum face size to expect, the higher the faster processing will be,
-    // but smaller faces won't be detected
-    minFaceSize: 200
-  }
+async function run1() {
 
-  
+    const MODELS = "/data/weights/"; // Contains all the weights.
 
-  async function run() {
-	  
-	const MODELS = "/data/weights/"; // Contains all the weights.
-
-    await faceapi.loadMtcnnModel(MODELS)
-    await faceapi.loadFaceRecognitionModel(MODELS)
     await faceapi.loadSsdMobilenetv1Model(MODELS)
     await faceapi.loadFaceLandmarkModel(MODELS)
-
+    await faceapi.loadFaceRecognitionModel(MODELS)
     
-    navigator.permissions.query({name:'camera'}).then(function(result) {
-      if (result.state == 'granted') {
-        alert("granted");
-      } else if (result.state == 'prompt') {
-        alert("prompt");
-      } else if (result.state == 'denied') {
-        alert("denied");
-      }
-      result.onchange = function() {
-        alert("change permission");
-      };
 
-      var player = document.getElementById('player');
+// try to access users webcam and stream the images
+  // to the video element
+ const videoEl = document.getElementById('player')
+  navigator.getUserMedia(
+    { video: {} },
+    stream => videoEl.srcObject = stream,
+    err => console.error(err)
+)
+}
 
-      var handleSuccess = function(stream) {
-        player.srcObject = stream;
-      };
+async function run2() {
     
-      navigator.mediaDevices.getUserMedia({video: true})
-          .then(handleSuccess);
-    });
-	
-  }
+const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
 
-  async function run2() {
-    var player = document.getElementById('player');
+overlay.width = 500
+overlay.height = 400
+const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
 
-    const mtcnnResults = await faceapi.mtcnn(player, mtcnnForwardParams);
-    faceapi.drawDetection('overlay', mtcnnResults.map(res => res.faceDetection), { withScore: false })
-    faceapi.drawLandmarks('overlay', mtcnnResults.map(res => res.faceLandmarks), { lineWidth: 4, color: 'red' })
+faceapi.drawDetection(overlay, detectionsForSize, { withScore: true })    
 
-    const options = new faceapi.MtcnnOptions(mtcnnForwardParams)
-    const fullFaceDescriptions = await faceapi.detectAllFaces(player, options).withFaceLandmarks().withFaceDescriptors()
 
-    const labels = ['elorriaga', 'crosetti']
-
-    const labeledFaceDescriptors = await Promise.all(
-      labels.map(async label => {
-        // fetch image data from urls and convert blob to HTMLImage element
-        const imgUrl = `data/faces/${label}.png`
-        const img = await faceapi.fetchImage(imgUrl)
-        
-        // detect the face with the highest score in the image and compute it's landmarks and face descriptor
-        const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
-        
-        if (!fullFaceDescription) {
-          throw new Error(`no faces detected for ${label}`)
-        }
-        
-        const faceDescriptors = [fullFaceDescription.descriptor]
-        return new faceapi.LabeledFaceDescriptors(label, faceDescriptors)
-      })
-    )
+const input = document.getElementById('player')
+const fullFaceDescriptions = await faceapi.detectAllFaces(input).withFaceLandmarks().withFaceDescriptors()
     
-    // 0.6 is a good distance threshold value to judge
-    // whether the descriptors match or not
-    const maxDescriptorDistance = 0.6
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
-
-    const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
-
-    const boxesWithText = results.map((bestMatch, i) => {
-      const box = fullFaceDescriptions[i].detection.box
-      const text = bestMatch.toString()
-      const boxWithText = new faceapi.BoxWithText(box, text)
-      return boxWithText
-    })
     
-    faceapi.drawDetection(canvas, boxesWithText)
-  }
+const labels = ['elorriaga','crosetti']
 
-  async function onPlay(videoEl) {
-    // run face detection & recognition
-    // ...
-    run2();
+const labeledFaceDescriptors = await Promise.all(
+  labels.map(async label => {
+    // fetch image data from urls and convert blob to HTMLImage element
+    const imgUrl = `data/faces/${label}.png`
+    const img = await faceapi.fetchImage(imgUrl)
+    
+    // detect the face with the highest score in the image and compute it's landmarks and face descriptor
+    const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
+    
+    if (!fullFaceDescription) {
+      throw new Error(`no faces detected for ${label}`)
+    }
+    
+    const faceDescriptors = [fullFaceDescription.descriptor]
+   // console.log(label)
+    return new faceapi.LabeledFaceDescriptors(label, faceDescriptors)
+  })
+)
+
+// 0.6 is a good distance threshold value to judge
+// whether the descriptors match or not
+const maxDescriptorDistance = 0.6
+const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
+ //console.log("face matcher"+faceMatcher)
+const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
+
+
+const boxesWithText = results.map((bestMatch, i) => {
+  const box = fullFaceDescriptions[i].detection.box
+  const text = bestMatch.toString()
+  const boxWithText = new faceapi.BoxWithText(box, text)
+   return boxWithText;
+})
+
+faceapi.drawDetection(overlay, boxesWithText)
+
+
+}
+
+async function onPlay(videoEl) {
+    run2()
     setTimeout(() => onPlay(videoEl))
-  }
-  
-  
-  
+}

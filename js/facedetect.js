@@ -67,12 +67,12 @@
     const options = new faceapi.MtcnnOptions(mtcnnParams)
     const fullFaceDescriptions = await faceapi.detectAllFaces(player, options).withFaceLandmarks().withFaceDescriptors()
 
-    const labels = ['sheldon' 'raj', 'leonard', 'howard']
+    const labels = ['elorriaga' 'crosetti']
 
     const labeledFaceDescriptors = await Promise.all(
       labels.map(async label => {
         // fetch image data from urls and convert blob to HTMLImage element
-        const imgUrl = `${label}.png`
+        const imgUrl = `data/faces/${label}.png`
         const img = await faceapi.fetchImage(imgUrl)
         
         // detect the face with the highest score in the image and compute it's landmarks and face descriptor

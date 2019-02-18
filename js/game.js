@@ -1,5 +1,5 @@
-var gun = Gun('https://webareaekasa.github.io/gun');
-//var gun = Gun();
+//var gun = Gun('https://webareaekasa.github.io');
+var gun = Gun();
 //var points = {};
 
   $(function() {

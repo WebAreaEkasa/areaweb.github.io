@@ -26,8 +26,8 @@ async function run2() {
     
 const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
 
-overlay.width = 500
-overlay.height = 400
+overlay.width = videoEl.width;
+overlay.height = videoEl.height;
 const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
 
 faceapi.drawDetection(overlay, detectionsForSize, { withScore: true })    

@@ -51,7 +51,7 @@ const labeledFaceDescriptors = await Promise.all(
     const img = await faceapi.fetchImage(imgUrl)
     
     // detect the face with the highest score in the image and compute it's landmarks and face descriptor
-    const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks(true).withFaceDescriptor()
+    const fullFaceDescription = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks(true).withFaceDescriptor()
     
     if (!fullFaceDescription) {
       throw new Error(`no faces detected for ${label}`)

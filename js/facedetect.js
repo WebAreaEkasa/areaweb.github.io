@@ -28,7 +28,9 @@ async function run1() {
 
 async function run2() {
     
-const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
+//const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
+const mtcnnResults = await faceapi.tinyFaceDetector(document.getElementById('player'));
+
 
 const input = document.getElementById('player');
 overlay.width = input.videoWidth;

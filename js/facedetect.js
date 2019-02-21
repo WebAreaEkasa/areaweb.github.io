@@ -39,7 +39,7 @@ const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
 
 faceapi.drawDetection(overlay, detectionsForSize, { withScore: true })    
 
-const fullFaceDescriptions = await faceapi.detectAllFaces(input).withFaceLandmarks(true).withFaceDescriptors()
+//const fullFaceDescriptions = await faceapi.detectAllFaces(input).withFaceLandmarks(true).withFaceDescriptors()
     
     
 const labels = ['elorriaga','crosetti']
@@ -68,15 +68,15 @@ const labeledFaceDescriptors = await Promise.all(
 const maxDescriptorDistance = 0.6
 const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
  //console.log("face matcher"+faceMatcher)
-const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
+//const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
 
 
-const boxesWithText = results.map((bestMatch, i) => {
-  const box = fullFaceDescriptions[i].detection.box
-  const text = bestMatch.toString()
-  const boxWithText = new faceapi.BoxWithText(box, text)
-   return boxWithText;
-})
+// const boxesWithText = results.map((bestMatch, i) => {
+//   const box = fullFaceDescriptions[i].detection.box
+//   const text = bestMatch.toString()
+//   const boxWithText = new faceapi.BoxWithText(box, text)
+//    return boxWithText;
+// })
 
 faceapi.drawDetection(overlay, boxesWithText)
 

@@ -7,8 +7,12 @@ async function run1() {
 
     const MODELS = "/data/weights/"; // Contains all the weights.
 
-    await faceapi.loadSsdMobilenetv1Model(MODELS)
-    await faceapi.loadFaceLandmarkModel(MODELS)
+    // await faceapi.loadSsdMobilenetv1Model(MODELS)
+    // await faceapi.loadFaceLandmarkModel(MODELS)
+    // await faceapi.loadFaceRecognitionModel(MODELS)
+      
+    await faceapi.loadTinyFaceDetectorModel(MODELS)
+    await faceapi.loadFaceLandmarkTinyModel(MODELS)
     await faceapi.loadFaceRecognitionModel(MODELS)
     
 

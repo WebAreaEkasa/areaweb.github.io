@@ -39,7 +39,7 @@ const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
 
 faceapi.drawDetection(overlay, detectionsForSize, { withScore: true })    
 
-const fullFaceDescriptions = await faceapi.detectAllFaces(input).withFaceLandmarks().withFaceDescriptors()
+const fullFaceDescriptions = await faceapi.detectAllFaces(input).withFaceLandmarks(true).withFaceDescriptors()
     
     
 const labels = ['elorriaga','crosetti']
@@ -51,7 +51,7 @@ const labeledFaceDescriptors = await Promise.all(
     const img = await faceapi.fetchImage(imgUrl)
     
     // detect the face with the highest score in the image and compute it's landmarks and face descriptor
-    const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
+    const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks(true).withFaceDescriptor()
     
     if (!fullFaceDescription) {
       throw new Error(`no faces detected for ${label}`)

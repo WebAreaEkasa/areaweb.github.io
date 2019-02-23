@@ -3,18 +3,27 @@ $(document).ready(function() {
   runOnLoad();
 })
 
+
 async function runOnLoad() {
   await loadModels();
   labelImg = await Promise.all(await fecthImages());
 
-// try to access users webcam and stream the images
-  // to the video element
- const videoEl = getPlayer();
-  navigator.getUserMedia(
-    { video: {} },
-    stream => videoEl.srcObject = stream,
-    err => console.error(err)
-)
+  const constraints = window.constraints = {
+    audio: false,
+    video: true
+  };
+
+  const stream = await navigator.mediaDevices.getUserMedia(constraints);
+  handleSuccess(stream);
+}
+
+function handleSuccess(stream) {
+  const video = getPlayer();
+  const videoTracks = stream.getVideoTracks();
+  //console.log('Got stream with constraints:', constraints);
+  //console.log(`Using video device: ${videoTracks[0].label}`);
+  window.stream = stream; // make variable available to browser console
+  video.srcObject = stream;
 }
 
 async function onPlay(videoEl) {
@@ -24,14 +33,14 @@ async function onPlay(videoEl) {
 
 async function runOnPlay() {
     
-  const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
+  //const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
   //const mtcnnResults = await faceapi.tinyFaceDetector(document.getElementById('player'));
 
   const input = getPlayer();
   const overlay = getOverlay();
   overlay.width = input.videoWidth;
   overlay.height = input.videoHeight;
-  const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
+  //const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
 
   //const tinyFaceDetectorOptions = getTinyFaceDetectorOptions();
 
@@ -83,7 +92,7 @@ function getOverlay(){
 }
 
 async function loadModels(){
-  const MODELS = "/data/weights/"; // Contains all the weights.
+  const MODELS = "https://webareaekasa.github.io/data/weights/"; // Contains all the weights.
 
   await faceapi.loadSsdMobilenetv1Model(MODELS)
   await faceapi.loadFaceLandmarkModel(MODELS)

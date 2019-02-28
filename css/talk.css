@@ -1,0 +1,72 @@
+h1 {
+  margin:0;
+}
+
+h2 {
+  color: #86a800;
+  font-weight: 100;
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+ 
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+    font-size: inherit;
+}
+.btn-large {
+  width: 80%;
+  height: 10rem;
+  border-radius: 5px;
+  box-shadow: none;
+
+}
+.green {
+  background-color: #86a800 !important;
+}
+
+.purple {
+  background-color: #704e69 !important;
+}
+
+.green-text {
+  color: #86a800 !important;
+}
+
+.logo {
+  width: 40%
+}
+
+.row.title {
+  width: 80%
+}
+
+.row {
+  margin-bottom: 0;
+}
+
+.row .col { 
+  padding: 0;
+}
+
+.row a {
+  line-height: 10rem;
+}
+
+@media screen and (min-width:1250px) {
+ 
+  .logo {
+      width: 20%;
+  }
+
+  .btn-large {
+    width: 20rem;
+    height: 54px;
+  }
+
+  .row a {
+    line-height: 54px;
+  }
+  
+}

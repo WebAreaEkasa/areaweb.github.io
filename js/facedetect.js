@@ -1,20 +1,74 @@
 var labelImg;
+var scene;
+var camera;
+var renderer;
+var enumeratorPromise;
+
 $(document).ready(function() {
   runOnLoad();
 })
-
 
 async function runOnLoad() {
   await loadModels();
   labelImg = await Promise.all(await fecthImages());
 
-  const constraints = window.constraints = {
-    audio: false,
-    video: true
+  navigator.mediaDevices.enumerateDevices()
+  .then(function(devices) {
+    devices.forEach(function(device) {
+      console.log(device.kind + ": " + device.label +
+                  " id = " + device.deviceId);
+    });
+  })
+  .catch(function(err) {
+    console.log(err.name + ": " + err.message);
+  });
+
+
+  navigator.mediaDevices.enumerateDevices()
+  .then(gotDevices)
+  .catch(errorDevices);
+
+  var videoSelect = getVideoSelect();
+  videoSelect.onchange = start;
+
+  await start(videoSelect);
+}
+
+async function start(videoSelect){
+  if (window.stream) {
+    window.stream.getTracks().forEach(track => {
+      track.stop();
+    });
+  }
+
+  const videoSource = videoSelect.val();
+  const constraints = {
+    video: {deviceId: videoSource ? {exact: videoSource} : undefined},
+    audio: false
   };
+
 
   const stream = await navigator.mediaDevices.getUserMedia(constraints);
   handleSuccess(stream);
+}
+
+
+function gotDevices(deviceInfos) {
+  var videoSelect = getVideoSelect();
+  for (var i = 0; i !== deviceInfos.length; ++i) {
+    var deviceInfo = deviceInfos[i];
+    var option = document.createElement('option');
+    option.value = deviceInfo.deviceId;
+    if (deviceInfo.kind === 'videoinput') {
+      option.text = deviceInfo.label || 'Camera ' +
+        (videoSelect.length + 1);
+      videoSelect.append(option);
+    }
+  }
+}
+
+function errorDevices(){
+  console.log("Error obteniendo dispositivos");
 }
 
 function handleSuccess(stream) {
@@ -79,7 +133,8 @@ async function runOnPlay() {
 
   const boxesWithText = getBoxesWithText(fullFaceDescriptions, results);
 
-  faceapi.drawDetection(overlay, boxesWithText)
+  //faceapi.drawDetection(overlay, boxesWithText)
+  showDiv(boxesWithText);
 }
 
 
@@ -89,6 +144,10 @@ function getPlayer(){
 
 function getOverlay(){
   return document.getElementById('overlay');
+}
+
+function getVideoSelect(){
+  return $("#videoSelect");
 }
 
 async function loadModels(){
@@ -116,7 +175,7 @@ function getBoxesWithText(fullFaceDescriptions, results){
     const box = fullFaceDescriptions[i].detection.box
     const text = bestMatch.toString()
     const boxWithText = new faceapi.BoxWithText(box, text)
-    console.log(boxWithText);
+    //console.log(boxWithText);
     return boxWithText;
   })
 }
@@ -139,4 +198,20 @@ function getLabelImg(label){
     outcome = labelImg.filter(x => x.label == label)[0].img;
   }
   return outcome;
+}
+
+function showDiv(boxesWithText){
+  var personLabels = getPersonLabels();
+  if(boxesWithText){
+    $(".jpanel").hide();
+    for(var i=0,len=boxesWithText.length;i<len;i++){
+      var boxDetectedPerson = boxesWithText[i].text;
+      for(var k=0,lenk=personLabels.length;k<lenk;k++){
+        var personLabel = personLabels[k];
+        if( boxDetectedPerson.indexOf(personLabel) > -1){
+          $("#" + personLabel).show();
+        }
+      }
+    }
+  }
 }

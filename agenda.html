@@ -1,122 +1,226 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RETATalks</title>
-    <script src="/js/lib/jquery-3.3.1.min.js"></script>
-     <!--Import Google Icon Font-->
-     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-     <!-- Compiled and minified CSS -->
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-      <!--Let browser know website is optimized for mobile-->
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="css/agenda.css">
 </head>
+
 <body>
     <div class="container">
         <div class="row">
-            <div class="col s12 m7">
-                <h2 class="header">Agenda</h2>
-                <div class="card horizontal">
-                    <div class="card-stacked">
-                    <div class="card-action">
-                            <div class="col s2">
-                                Hora
-                            </div>
-                            <div class="col s10">
-                                Titulo...
-                            </div>
-                    </div>
-                    <div class="card-action">
-                            <p>Talk description</p>
-                    </div>
-                    <div class="card-content">
-                        <div class="col s1">
-                            <img src="images/yuna.jpg" alt="" class="circle responsive-img">
-                        </div>
-                        <div class="col s11">
-                                <p>Author</p>
-                        </div>
-                    </div>                    
-                    </div>
+            <div class="">
+                <div class="header">
+                    <img src="/img/retatalks_logo.png"></img>
+                    <h2>Agenda</h2>
                 </div>
-
-
-                <div class="card horizontal">
-                    <div class="card-stacked">
-                    <div class="card-action">
-                        Titulo...
-                    </div>
-                    <div class="card-content">
-                        <p>Talk description</p>
-                    </div>
-                    
-                    </div>
-                </div>
-
-                <div class="card horizontal">
-                        <div class="card-stacked">
-                        <div class="card-action">
-                            Titulo...
-                        </div>
-                        <div class="card-content">
-                            <p>Talk description</p>
-                        </div>
-                        
-                        </div>
-                    </div>
-
+                <div class="cards-container">
                     <div class="card horizontal">
+                        <a href="/talk.html">
                             <div class="card-stacked">
+                                <div class="card-action">
+                                    <div class="col s9 title">
+                                        Domina el mundo con tecnologías&nbsp;web
+                                    </div>
+                                    <div class="col s3 hour">
+                                        8:05-8:45
+                                    </div>
+                                </div>
+                                <div class="card-action">
+                                    <p>
+                                        El mundo de las tecnologías web ha avanzado mucho en los últimos años
+                                        facilitando
+                                        casi cualquier tarea en cualquier entorno. Las capacidades actuales de los
+                                        lenguajes
+                                        HTML, CSS, y JAVASCRIPT a día de hoy son impresionantes!!! Se realizará una
+                                        introducción de la evolución y el uso de los lenguajes, seguido de unas pequeñas
+                                        demostraciones.
+                                    </p>
+                                </div>
+                                <div class="card-content names">
+                                    <p>DANIELE C. + IÑIGO E.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="card horizontal">
+                        <div class="card-stacked">
                             <div class="card-action">
-                                Titulo...
+                                <div class="col s9 title">
+                                    Manejar datos personales y no arruinarse en el intento
+                                </div>
+                                <div class="col s3 hour">
+                                    8:50–9:30
+                                </div>
                             </div>
-                            <div class="card-content">
-                                <p>Talk description</p>
+                            <div class="card-action">
+                                <p>
+                                    En esta sesión se explicarán los cambios más importantes en el tratamiento de datos
+                                    personales que se han marcado tras la entrada en vigor de la GDPR, así como algunos
+                                    ejemplos de infracciones y sanciones. Se resolverán dudas como cuál era la necesidad
+                                    de una nueva ley de protección de datos o qué acciones debemos llevar a cabo para
+                                    cumplir con todas sus exigencias y no ser sancionados.
+                                </p>
                             </div>
-                            
+                            <div class="card-content names">
+                                <p>OLATZ GARCÍA</p>
                             </div>
                         </div>
-
-                        <div class="card horizontal">
-                                <div class="card-stacked">
-                                <div class="card-action">
-                                    Titulo...
+                    </div>
+                    <div class="card horizontal">
+                        <div class="card-stacked">
+                            <div class="card-action">
+                                <div class="col s9 title">
+                                    Todo lo que siempre quiso saber sobre el Software Libre y
+                                    nunca se atrevió a preguntar
                                 </div>
-                                <div class="card-content">
-                                    <p>Talk description</p>
-                                </div>
-                                
+                                <div class="col s3 hour">
+                                    9:50–10:30
                                 </div>
                             </div>
-
-                            <div class="card horizontal">
-                                    <div class="card-stacked">
-                                    <div class="card-action">
-                                        Titulo...
-                                    </div>
-                                    <div class="card-content">
-                                        <p>Talk description</p>
-                                    </div>
-                                    
-                                    </div>
+                            <div class="card-action">
+                                <p>
+                                    ¿Qué es el Software Libre? ¿Cómo surgió? ¿Qué lo diferencia de otros tipos de
+                                    Software? ¿Quién lo usa? ¿Quién lo hace? ¿De verdad hay alternativas libres a los
+                                    programas que uso? ¿Y dices que es gratis? Muchas preguntas y todas las (mis!)
+                                    respuestas...
+                                </p>
+                            </div>
+                            <div class="card-content names">
+                                <p>GUILLERMO RODRÍGUEZ (Go4IT)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card horizontal">
+                        <div class="card-stacked">
+                            <div class="card-action">
+                                <div class="col s9 title">
+                                    Privacidad en los servicios de mensajería: OpenPGP
                                 </div>
-
-                                <div class="card horizontal">
-                                        <div class="card-stacked">
-                                        <div class="card-action">
-                                            Titulo...
-                                        </div>
-                                        <div class="card-content">
-                                            <p>Talk description</p>
-                                        </div>
-                                        
-                                        </div>
-                                    </div>
-
-
+                                <div class="col s3 hour">
+                                    10:35–11:15
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <p>
+                                    Daremos un vistazo a los principios en los que se basa la privacidad en el email y
+                                    mensajería. Descubriremos que es el estándar OpenPGP, sus implementaciones y
+                                    entorno, así como su integración en los clientes de correo. Veremos los servicios de
+                                    correo electrónico que incorporan estos estándares de seguridad y cómo se puede
+                                    usar en la mensajería instantánea.
+                                </p>
+                            </div>
+                            <div class="card-content names">
+                                <p>JAVIER DE MIGUEL</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card horizontal">
+                        <div class="card-stacked">
+                            <div class="card-action">
+                                <div class="col s9 title">
+                                    Mesa redonda: Servicios públicos vs Servicios privados
+                                </div>
+                                <div class="col s3 hour">
+                                    11:20–12:00
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <p>
+                                    ¿Tiene mejores resultados un colegio público o colegio privado?, ¿Cuándo asistir a
+                                    la
+                                    sanidad pública y cuándo a la privada? En resumen: Qué es mejor: ¿lo público o lo
+                                    privado?. En esta charla se propone un debate o mesa redonda en donde se tratará de
+                                    recopilar y valorar distintos argumentos y puntos de vista en cuanto a estas
+                                    preguntas.
+                                </p>
+                            </div>
+                            <div class="card-content names">
+                                <p>GALDER AURREKOETXEA</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card horizontal">
+                        <div class="card-stacked">
+                            <div class="card-action">
+                                <div class="col s9 title">
+                                    SmartWords - El&nbsp;lenguaje&nbsp;contraataca
+                                </div>
+                                <div class="col s3 hour">
+                                    12:20–13:00
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <p>
+                                    Hablaremos sobre la importancia del lenguaje en la comunicación.
+                                    Reflexionaremos sobre el uso que hacemos de las palabras y mediante algunos
+                                    consejos, intentaremos mejorar nuestra forma de expresarnos con una comunicación
+                                    positiva :)
+                                </p>
+                            </div>
+                            <div class="card-content names">
+                                <p>JANIRE LÓPEZ</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card horizontal">
+                        <div class="card-stacked">
+                            <div class="card-action">
+                                <div class="col s9 title">
+                                    Lo complicado de lo simple
+                                </div>
+                                <div class="col s3 hour">
+                                    13:05–13:45
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <p>
+                                    ¿Por qué resulta tan complejo diseñar interfaces si parece algo muy sencillo?¿Qué
+                                    aspectos son los que hacen que un producto digital sea simple, entendible y ágil?
+                                    Recogemos algunos de los aspectos que las empresas tecnológicas punteras tienen en
+                                    cuenta a la hora de diseñar sus productos digitales.
+                                </p>
+                            </div>
+                            <div class="card-content names">
+                                <p>GARAZI I. + NEREA A.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card horizontal">
+                        <div class="card-stacked">
+                            <div class="card-action">
+                                <div class="col s9 title">
+                                    MotivaSión (Motivación&nbsp;e&nbsp;Ilusión)
+                                </div>
+                                <div class="col s3 hour">
+                                    13:50–14:30
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <p>
+                                    Charla que intenta profundizar en la importancia de la motivación e ilusión en la
+                                    vida
+                                    y en este caso, enfocada al trabajo. Se intenta explicar porque es difícil
+                                    mantenerla y
+                                    se intentará remover conciencias e intentar promover nuevas técnicas en el trabajo
+                                    para potenciarla.
+                                </p>
+                            </div>
+                            <div class="card-content names">
+                                <p>SERGIO LÓPEZ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>    
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </div>
 </body>
+
 </html>

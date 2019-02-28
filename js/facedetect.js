@@ -3,8 +3,17 @@ var scene;
 var camera;
 var renderer;
 var enumeratorPromise;
+var input;
+var overlay;
+var labels;
+
 
 $(document).ready(function() {
+  input = getPlayer();
+  overlay = getOverlay();
+  overlay.width = input.videoWidth;
+  overlay.height = input.videoHeight;
+  labels = getPersonLabels();
   runOnLoad();
 })
 
@@ -47,7 +56,6 @@ async function start(videoSelect){
     audio: false
   };
 
-
   const stream = await navigator.mediaDevices.getUserMedia(constraints);
   handleSuccess(stream);
 }
@@ -86,24 +94,13 @@ async function onPlay(videoEl) {
 }
 
 async function runOnPlay() {
-    
   //const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
   //const mtcnnResults = await faceapi.tinyFaceDetector(document.getElementById('player'));
-
-  const input = getPlayer();
-  const overlay = getOverlay();
-  overlay.width = input.videoWidth;
-  overlay.height = input.videoHeight;
   //const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
-
   //const tinyFaceDetectorOptions = getTinyFaceDetectorOptions();
-
   //faceapi.drawDetection(overlay, detectionsForSize, { withScore: true })    
-
   //const fullFaceDescriptions = await faceapi.detectAllFaces(input, tinyFaceDetectorOptions).withFaceLandmarks(true).withFaceDescriptors()
   const fullFaceDescriptions = await faceapi.detectAllFaces(input).withFaceLandmarks().withFaceDescriptors()
-      
-  var labels = getPersonLabels();
 
   const labeledFaceDescriptors = await Promise.all(
     labels.map(async label => {

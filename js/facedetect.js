@@ -6,6 +6,7 @@ var enumeratorPromise;
 var input;
 var overlay;
 var labels;
+var acabado = true;
 
 
 $(document).ready(function () {
@@ -89,11 +90,14 @@ function handleSuccess(stream) {
 }
 
 async function onPlay(videoEl) {
-  runOnPlay()
-  setTimeout(() => onPlay(videoEl), 5000)
+  if (acabado) {
+    runOnPlay()
+    setTimeout(() => onPlay(videoEl), 1000)
+  }
 }
 
 async function runOnPlay() {
+  acabado = false;
   //const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
   //const mtcnnResults = await faceapi.tinyFaceDetector(document.getElementById('player'));
   //const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
@@ -102,40 +106,41 @@ async function runOnPlay() {
   //const fullFaceDescriptions = await faceapi.detectAllFaces(input, tinyFaceDetectorOptions).withFaceLandmarks(true).withFaceDescriptors()
   const fullFaceDescriptions = await faceapi.detectAllFaces(input).withFaceLandmarks().withFaceDescriptors()
 
-  const labeledFaceDescriptors = await getFaceDescriptors();
+  const labeledFaceDescriptors = await Promise.all(await getLabelFaceDescriptor());
 
-  if (labeledFaceDescriptors && labeledFaceDescriptors.length > 0) {
+  // 0.6 is a good distance threshold value to judge
+  // whether the descriptors match or not
+  const maxDescriptorDistance = 0.6;
+  const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
+  //console.log("face matcher"+faceMatcher)
+  const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
 
-    // 0.6 is a good distance threshold value to judge
-    // whether the descriptors match or not
-    const maxDescriptorDistance = 0.6;
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
-    //console.log("face matcher"+faceMatcher)
-    const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
+  const boxesWithText = getBoxesWithText(fullFaceDescriptions, results);
 
-    const boxesWithText = getBoxesWithText(fullFaceDescriptions, results);
+  //faceapi.drawDetection(overlay, boxesWithText)
+  showDiv(boxesWithText);
 
-    //faceapi.drawDetection(overlay, boxesWithText)
-    showDiv(boxesWithText);
-  }
+  acabado = true;
 }
 
-async function getFaceDescriptors() {
+async function getLabelFaceDescriptor() {
   var outcome = [];
   for (let i = 0; i < labels.length; i++) {
     const label = labels[i];
     const img = getLabelImg(label);
-
     // detect the face with the highest score in the image and compute it's landmarks and face descriptor
     //const fullFaceDescription = await faceapi.detectSingleFace(img, tinyFaceDetectorOptions).withFaceLandmarks(true).withFaceDescriptor()
     const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
 
     if (fullFaceDescription) {
-      outcome.push(new faceapi.LabeledFaceDescriptors(label, [fullFaceDescription.descriptor]));
+      const faceDescriptors = [fullFaceDescription.descriptor]
+      outcome.push(new faceapi.LabeledFaceDescriptors(label, faceDescriptors));
     }
   }
+
   return outcome;
 }
+
 
 function getPlayer() {
   return document.getElementById('player');

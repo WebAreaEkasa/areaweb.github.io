@@ -90,35 +90,37 @@ function handleSuccess(stream) {
 }
 
 async function onPlay(videoEl) {
-    runOnPlay()
-    setTimeout(() => onPlay(videoEl), 5000)
-  
+  runOnPlay()
+  setTimeout(() => onPlay(videoEl), 5000)
+
 }
 
 async function runOnPlay() {
+  try {
+    //const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
+    //const mtcnnResults = await faceapi.tinyFaceDetector(document.getElementById('player'));
+    //const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
+    //const tinyFaceDetectorOptions = getTinyFaceDetectorOptions();
+    //faceapi.drawDetection(overlay, detectionsForSize, { withScore: true })    
+    //const fullFaceDescriptions = await faceapi.detectAllFaces(input, tinyFaceDetectorOptions).withFaceLandmarks(true).withFaceDescriptors()
+    const fullFaceDescriptions = await faceapi.detectAllFaces(input).withFaceLandmarks().withFaceDescriptors()
 
-  //const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
-  //const mtcnnResults = await faceapi.tinyFaceDetector(document.getElementById('player'));
-  //const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
-  //const tinyFaceDetectorOptions = getTinyFaceDetectorOptions();
-  //faceapi.drawDetection(overlay, detectionsForSize, { withScore: true })    
-  //const fullFaceDescriptions = await faceapi.detectAllFaces(input, tinyFaceDetectorOptions).withFaceLandmarks(true).withFaceDescriptors()
-  const fullFaceDescriptions = await faceapi.detectAllFaces(input).withFaceLandmarks().withFaceDescriptors()
+    const labeledFaceDescriptors = await Promise.all(await getLabelFaceDescriptor());
 
-  const labeledFaceDescriptors = await Promise.all(await getLabelFaceDescriptor());
+    // 0.6 is a good distance threshold value to judge
+    // whether the descriptors match or not
+    const maxDescriptorDistance = 0.6;
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
+    //console.log("face matcher"+faceMatcher)
+    const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
 
-  // 0.6 is a good distance threshold value to judge
-  // whether the descriptors match or not
-  const maxDescriptorDistance = 0.6;
-  const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
-  //console.log("face matcher"+faceMatcher)
-  const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
+    const boxesWithText = getBoxesWithText(fullFaceDescriptions, results);
 
-  const boxesWithText = getBoxesWithText(fullFaceDescriptions, results);
-
-  //faceapi.drawDetection(overlay, boxesWithText)
-  showDiv(boxesWithText);
-
+    //faceapi.drawDetection(overlay, boxesWithText)
+    showDiv(boxesWithText);
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 async function getLabelFaceDescriptor() {

@@ -103,14 +103,17 @@ async function onPlay(videoEl) {
   // 0.6 is a good distance threshold value to judge
   // whether the descriptors match or not
   const maxDescriptorDistance = 0.6;
-  const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
-  //console.log("face matcher"+faceMatcher)
-  const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
+  if (labeledFaceDescriptors && labeledFaceDescriptors.length > 0) {
 
-  const boxesWithText = getBoxesWithText(fullFaceDescriptions, results);
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
+    //console.log("face matcher"+faceMatcher)
+    const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
 
-  //faceapi.drawDetection(overlay, boxesWithText)
-  showDiv(boxesWithText);
+    const boxesWithText = getBoxesWithText(fullFaceDescriptions, results);
+
+    //faceapi.drawDetection(overlay, boxesWithText)
+    showDiv(boxesWithText);
+  }
 
   onPlay(videoEl);
 }

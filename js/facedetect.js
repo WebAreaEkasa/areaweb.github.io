@@ -90,14 +90,6 @@ function handleSuccess(stream) {
 }
 
 async function onPlay(videoEl) {
-  if (acabado) {
-    runOnPlay()
-    setTimeout(() => onPlay(videoEl), 1000)
-  }
-}
-
-async function runOnPlay() {
-  acabado = false;
   //const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
   //const mtcnnResults = await faceapi.tinyFaceDetector(document.getElementById('player'));
   //const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
@@ -120,7 +112,7 @@ async function runOnPlay() {
   //faceapi.drawDetection(overlay, boxesWithText)
   showDiv(boxesWithText);
 
-  acabado = true;
+  onPlay(videoEl);
 }
 
 async function getLabelFaceDescriptor() {

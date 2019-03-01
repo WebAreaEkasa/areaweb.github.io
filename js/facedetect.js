@@ -6,10 +6,9 @@ var enumeratorPromise;
 var input;
 var overlay;
 var labels;
-var acabado = true;
 
 
-$(document).ready(function () {
+$(document).ready(function() {
   input = getPlayer();
   overlay = getOverlay();
   overlay.width = input.videoWidth;
@@ -91,8 +90,7 @@ function handleSuccess(stream) {
 
 async function onPlay(videoEl) {
   runOnPlay()
-  setTimeout(() => onPlay(videoEl), 5000)
-
+  setTimeout(() => onPlay(videoEl), 1000)
 }
 
 async function runOnPlay() {
@@ -107,17 +105,19 @@ async function runOnPlay() {
 
     const labeledFaceDescriptors = await Promise.all(await getLabelFaceDescriptor());
 
-    // 0.6 is a good distance threshold value to judge
-    // whether the descriptors match or not
-    const maxDescriptorDistance = 0.6;
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
-    //console.log("face matcher"+faceMatcher)
-    const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
+    if (labeledFaceDescriptors && labeledFaceDescriptors.length > 0) {
+      // 0.6 is a good distance threshold value to judge
+      // whether the descriptors match or not
+      const maxDescriptorDistance = 0.6;
+      const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
+      //console.log("face matcher"+faceMatcher)
+      const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
 
-    const boxesWithText = getBoxesWithText(fullFaceDescriptions, results);
+      const boxesWithText = getBoxesWithText(fullFaceDescriptions, results);
 
-    //faceapi.drawDetection(overlay, boxesWithText)
-    showDiv(boxesWithText);
+      //faceapi.drawDetection(overlay, boxesWithText)
+      showDiv(boxesWithText);
+    }
   } catch (e) {
     console.log(e);
   }

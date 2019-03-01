@@ -2,34 +2,32 @@ var isElectron = false;
 
 var ipcRenderer;
 
-if(typeof(require) !== "undefined"){
+if (typeof (require) !== "undefined") {
     isElectron = true;
-    var {ipcRenderer} = require('electron')
+    var { ipcRenderer } = require('electron')
     window.ipc = window.ipcRenderer || {};
 }
 
-
-window.addEventListener('DOMContentLoaded', function(){
+window.addEventListener('DOMContentLoaded', function () {
     const updateBtn = document.getElementById('openfolder');
     const calcBtn = document.getElementById('opencalc');
     const calcFrame = document.getElementById('calcFrame');
-    
-    
+
     updateBtn.addEventListener('click', function () {
-        if(isElectron){
+        if (isElectron) {
             ipcRenderer.send('open-item', "www");
         }
-        else{
-            alert("No folder. Estas en browser!!!");
+        else {
+            M.toast({html: 'Estas en browser!!!', classes: 'green'})
         }
         return false;
     })
 
     calcBtn.addEventListener('click', function () {
-        if(isElectron){
+        if (isElectron) {
             ipcRenderer.send('open-calc', "");
         }
-        else{
+        else {
             calcFrame.style.display = null;
         }
         return false;

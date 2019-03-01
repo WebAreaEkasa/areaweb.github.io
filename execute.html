@@ -1,15 +1,55 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RETATalks</title>
-    <script src="js/execute.js"></script>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="css/execute.css">
 </head>
+
 <body>
-    Execute
-    <div id="openfolder" >Open folder</div>
-    <div id="opencalc" >Open calculator</div>
-    <iframe id="calcFrame" src='https://www.embed.com/app/calculator/gray-calculator.html' style='width: 500px; height: 500px; display: none' scrolling='no' frameBorder='0'></iframe>
+    <div class="section no-pad-bot" id="index-banner">
+        <div class="container center">
+            <h1 class="header center green-text">
+                <a href="/agenda.html">
+                    <img class="logo" src="/img/retatalks_logo.png"></img>
+                </a>
+            </h1>
+        
+            <div class="row center title">
+                <h2 class="header col s12 green-text">EJECUTA UNA ACCIÓN</h2>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="section">
+            <div class="row center">
+                <a href="#" id="openfolder" class="btn-large waves-effect waves-light purple">Abre Carpeta</a>
+            </div>
+            <br>
+            <div class="row center">
+                <a href="#" id="opencalc" class="btn-large waves-effect waves-light purple">Abre Calculadora</a>
+            </div>
+            <br>
+        </div>
+        <div class="section" style="text-align: center;">
+            <iframe id="calcFrame" width="219" height="302" src="http://calculator-1.com/outdoor/?f=42aaff&r=ffffff"
+                scrolling="no" frameborder="0" style="display:none;">
+            </iframe>
+
+        </div>
+    </div>
+
+
+
+    <script src="/js/lib/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="js/execute.js"></script>
 </body>
+
 </html>

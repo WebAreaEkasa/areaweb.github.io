@@ -1,28 +1,53 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
     <title>RETATalks</title>
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="css/facedetect.css?v1.0">
+</head>
+
+<body>
+    <div class="section no-pad-bot" id="index-banner">
+        <div class="container center">
+            <h1 class="header center green-text">
+                <a href="/agenda.html">
+                    <img class="logo" src="/img/retatalks_logo.png"></img>
+                </a>
+            </h1>
+
+            <div class="row center title">
+                <h2 class="header col s12 green-text">FACE DETECT</h2>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="section">
+            <select id="videoSelect"></select>
+            <div style="position: relative" class="margin">
+                <video onplay="onPlay(this)" id="player" autoplay muted></video>
+                <canvas id="overlay"></canvas>
+            </div>
+            <div id="elorriaga" class="jpanel" style="display:none">
+                Iñigo
+                <img src="/img/foca.gif" />
+            </div>
+            <div id="crosetti" class="jpanel" style="display: none">
+                crosetti
+                <img src="/img/bob.gif" />
+            </div>
+        </div>
+    </div>
+
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
     <script src="js/lib/jquery-3.3.1.min.js"></script>
     <script src="js/lib/face-api.js"></script>
-    <script src="js/facedetect.js?v=1.1"></script>
+    <script src="js/facedetect.js?v1.0"></script>
     <script>if (window.module) module = window.module;</script>
-    <link rel="stylesheet" type="text/css" href="css/facedetect.css">
-</head>
-<body>
-    <select id="videoSelect"></select>
-    <div style="position: relative" class="margin">
-        <video onplay="onPlay(this)" id="player" autoplay muted></video>
-        <canvas id="overlay" ></canvas>   
-      </div>
-      <div id="elorriaga" class="jpanel" style="display:none">
-        Iñigo
-        <img src="/img/foca.gif"/>
-    </div>
-    <div id="crosetti" class="jpanel" style="display: none">
-        crosetti
-        <img src="/img/bob.gif"/>
-    </div>
 </body>
+
 </html>

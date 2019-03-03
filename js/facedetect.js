@@ -1,177 +1,99 @@
-var labelImg;
-var scene;
-var camera;
-var renderer;
-var enumeratorPromise;
-var input;
-var overlay;
-var labels;
+const SSD_MOBILENETV1 = 'ssd_mobilenetv1'
+const TINY_FACE_DETECTOR = 'tiny_face_detector'
+const MTCNN = 'mtcnn'
 
+let selectedFaceDetector = TINY_FACE_DETECTOR
 
-$(document).ready(function() {
-  input = getPlayer();
-  overlay = getOverlay();
-  overlay.width = input.videoWidth;
-  overlay.height = input.videoHeight;
-  labels = getPersonLabels();
-  runOnLoad();
+// ssd_mobilenetv1 options
+let minConfidence = 0.5
+
+// tiny_face_detector options
+let inputSize = 128
+let scoreThreshold = 0.5
+
+//mtcnn options
+let minFaceSize = 20
+
+let labeledFaceDescriptors;
+let faceMatcher;
+
+$(document).ready(function () {
+  run()
 })
 
-async function runOnLoad() {
-  await loadModels();
-  labelImg = await Promise.all(await fecthImages());
+async function run() {
 
-  navigator.mediaDevices.enumerateDevices()
-    .then(function (devices) {
-      devices.forEach(function (device) {
-        console.log(device.kind + ": " + device.label +
-          " id = " + device.deviceId);
-      });
+  await loadModules();
+
+  const labels = getPersonLabels();
+
+  labeledFaceDescriptors = await Promise.all(
+    labels.map(async label => {
+      // fetch image data from urls and convert blob to HTMLImage element
+      const imgUrl = `/data/faces/${label}.jpg`
+      const img = await faceapi.fetchImage(imgUrl)
+
+      const fullFaceDescriptions = await faceapi
+        .detectAllFaces(img, getFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptors()
+
+      if (!fullFaceDescriptions.length) {
+        return
+      }
+      const faceDescriptors = [fullFaceDescriptions[0].descriptor]
+      return new faceapi.LabeledFaceDescriptors(label, faceDescriptors)
     })
-    .catch(function (err) {
-      console.log(err.name + ": " + err.message);
-    });
+  )
+
+  const maxDescriptorDistance = 0.6
+  faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance);
 
 
-  navigator.mediaDevices.enumerateDevices()
-    .then(gotDevices)
-    .catch(errorDevices);
+  // try to access users webcam and stream the images
+  // to the video element
+  const stream = await navigator.mediaDevices.getUserMedia({ video: {} })
+  const videoEl = $('#inputVideo').get(0)
+  videoEl.srcObject = stream
 
-  var videoSelect = getVideoSelect();
-  videoSelect.onchange = start;
-
-  await start(videoSelect);
-}
-
-async function start(videoSelect) {
-  if (window.stream) {
-    window.stream.getTracks().forEach(track => {
-      track.stop();
-    });
-  }
-
-  const videoSource = videoSelect.val();
-  const constraints = {
-    video: { deviceId: videoSource ? { exact: videoSource } : undefined },
-    audio: false
-  };
-
-  const stream = await navigator.mediaDevices.getUserMedia(constraints);
-  handleSuccess(stream);
-}
-
-
-function gotDevices(deviceInfos) {
-  var videoSelect = getVideoSelect();
-  for (var i = 0; i !== deviceInfos.length; ++i) {
-    var deviceInfo = deviceInfos[i];
-    var option = document.createElement('option');
-    option.value = deviceInfo.deviceId;
-    if (deviceInfo.kind === 'videoinput') {
-      option.text = deviceInfo.label || 'Camera ' +
-        (videoSelect.length + 1);
-      videoSelect.append(option);
-    }
-  }
-}
-
-function errorDevices() {
-  console.log("Error obteniendo dispositivos");
-}
-
-function handleSuccess(stream) {
-  const video = getPlayer();
-  const videoTracks = stream.getVideoTracks();
-  //console.log('Got stream with constraints:', constraints);
-  //console.log(`Using video device: ${videoTracks[0].label}`);
-  window.stream = stream; // make variable available to browser console
-  video.srcObject = stream;
-}
-
-async function onPlay(videoEl) {
-  runOnPlay()
-  setTimeout(() => onPlay(videoEl), 1000)
-}
-
-async function runOnPlay() {
-  try {
-    //const mtcnnResults = await faceapi.ssdMobilenetv1(document.getElementById('player'))
-    //const mtcnnResults = await faceapi.tinyFaceDetector(document.getElementById('player'));
-    //const detectionsForSize = mtcnnResults.map(det => det.forSize(500, 400))
-    //const tinyFaceDetectorOptions = getTinyFaceDetectorOptions();
-    //faceapi.drawDetection(overlay, detectionsForSize, { withScore: true })    
-    //const fullFaceDescriptions = await faceapi.detectAllFaces(input, tinyFaceDetectorOptions).withFaceLandmarks(true).withFaceDescriptors()
-    const fullFaceDescriptions = await faceapi.detectAllFaces(input).withFaceLandmarks().withFaceDescriptors()
-
-    const labeledFaceDescriptors = await Promise.all(await getLabelFaceDescriptor());
-
-    if (labeledFaceDescriptors && labeledFaceDescriptors.length > 0) {
-      // 0.6 is a good distance threshold value to judge
-      // whether the descriptors match or not
-      const maxDescriptorDistance = 0.6;
-      const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, maxDescriptorDistance)
-      //console.log("face matcher"+faceMatcher)
-      const results = fullFaceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
-
-      const boxesWithText = getBoxesWithText(fullFaceDescriptions, results);
-
-      //faceapi.drawDetection(overlay, boxesWithText)
-      showDiv(boxesWithText);
-    }
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-async function getLabelFaceDescriptor() {
-  var outcome = [];
-  for (let i = 0; i < labels.length; i++) {
-    const label = labels[i];
-    const img = getLabelImg(label);
-    // detect the face with the highest score in the image and compute it's landmarks and face descriptor
-    //const fullFaceDescription = await faceapi.detectSingleFace(img, tinyFaceDetectorOptions).withFaceLandmarks(true).withFaceDescriptor()
-    const fullFaceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
-
-    if (fullFaceDescription) {
-      const faceDescriptors = [fullFaceDescription.descriptor]
-      outcome.push(new faceapi.LabeledFaceDescriptors(label, faceDescriptors));
-    }
-  }
-
-  return outcome;
-}
-
-
-function getPlayer() {
-  return document.getElementById('player');
-}
-
-function getOverlay() {
-  return document.getElementById('overlay');
-}
-
-function getVideoSelect() {
-  return $("#videoSelect");
-}
-
-async function loadModels() {
-  const MODELS = "https://webareaekasa.github.io/data/weights/"; // Contains all the weights.
-
-  await faceapi.loadSsdMobilenetv1Model(MODELS)
-  await faceapi.loadFaceLandmarkModel(MODELS)
-  await faceapi.loadFaceRecognitionModel(MODELS)
-
-  // await faceapi.loadTinyFaceDetectorModel(MODELS)
-  // await faceapi.loadFaceLandmarkTinyModel(MODELS)
-  // await faceapi.loadFaceRecognitionModel(MODELS)
 }
 
 function getPersonLabels() {
-  return ['elorriaga', 'crosetti'];
+  return ['crosetti', 'elorriaga'];
 }
 
-function getTinyFaceDetectorOptions() {
-  return new faceapi.TinyFaceDetectorOptions();
+async function loadModules() {
+  if (!isFaceDetectionModelLoaded()) {
+    await getCurrentFaceDetectionNet().load('https://webareaekasa.github.io/data/weights/')
+    await faceapi.loadFaceLandmarkModel('https://webareaekasa.github.io/data/weights/')
+    await faceapi.loadFaceRecognitionModel('https://webareaekasa.github.io/data/weights/')
+  }
+}
+
+async function onPlay() {
+  const videoEl = $('#inputVideo').get(0)
+  const canvas = $('#overlay').get(0);
+
+  if (videoEl.paused || videoEl.ended || !isFaceDetectionModelLoaded())
+    return setTimeout(() => onPlay())
+
+  const options = getFaceDetectorOptions()
+  const results = await faceapi
+    .detectAllFaces(videoEl, options)
+    .withFaceLandmarks()
+    .withFaceDescriptors()
+
+  resizedResults = resizeCanvasAndResults(videoEl, canvas, results)
+  const boxesWithText = resizedResults.map(({ detection, descriptor }) =>
+    new faceapi.BoxWithText(
+      detection.box,
+      faceMatcher.findBestMatch(descriptor).toString()
+    )
+  )
+  showDiv(boxesWithText);
+  //faceapi.drawDetection(canvas, boxesWithText)
+
+  setTimeout(() => onPlay())
 }
 
 function getBoxesWithText(fullFaceDescriptions, results) {
@@ -179,31 +101,9 @@ function getBoxesWithText(fullFaceDescriptions, results) {
     const box = fullFaceDescriptions[i].detection.box
     const text = bestMatch.toString()
     const boxWithText = new faceapi.BoxWithText(box, text)
-    //console.log(boxWithText);
     return boxWithText;
   })
 }
-
-async function fecthImages() {
-  var labels = getPersonLabels();
-  return labels.map(async label => {
-    // fetch image data from urls and convert blob to HTMLImage element
-    const imgUrl = `data/faces/${label}.png`
-    const img = await faceapi.fetchImage(imgUrl)
-    var labelImg = { label: label, img: img };
-    return labelImg;
-  });
-}
-
-
-function getLabelImg(label) {
-  var outcome;
-  if (labelImg && label) {
-    outcome = labelImg.filter(x => x.label == label)[0].img;
-  }
-  return outcome;
-}
-
 function showDiv(boxesWithText) {
   var personLabels = getPersonLabels();
   if (boxesWithText) {
@@ -218,4 +118,48 @@ function showDiv(boxesWithText) {
       }
     }
   }
+}
+
+
+function isFaceDetectionModelLoaded() {
+  return !!getCurrentFaceDetectionNet().params
+}
+
+function getCurrentFaceDetectionNet() {
+  if (selectedFaceDetector === SSD_MOBILENETV1) {
+    return faceapi.nets.ssdMobilenetv1
+  }
+  if (selectedFaceDetector === TINY_FACE_DETECTOR) {
+    return faceapi.nets.tinyFaceDetector
+  }
+  if (selectedFaceDetector === MTCNN) {
+    return faceapi.nets.mtcnn
+  }
+}
+
+function getFaceDetectorOptions() {
+  return selectedFaceDetector === SSD_MOBILENETV1
+    ? new faceapi.SsdMobilenetv1Options({ minConfidence })
+    : (
+      selectedFaceDetector === TINY_FACE_DETECTOR
+        ? new faceapi.TinyFaceDetectorOptions({ inputSize, scoreThreshold })
+        : new faceapi.MtcnnOptions({ minFaceSize })
+    )
+}
+
+function drawDetections(dimensions, canvas, detections) {
+  const resizedDetections = resizeCanvasAndResults(dimensions, canvas, detections)
+  faceapi.drawDetection(canvas, resizedDetections)
+}
+
+function resizeCanvasAndResults(dimensions, canvas, results) {
+  const { width, height } = dimensions instanceof HTMLVideoElement
+    ? faceapi.getMediaDimensions(dimensions)
+    : dimensions
+  canvas.width = width
+  canvas.height = height
+
+  // resize detections (and landmarks) in case displayed image is smaller than
+  // original size
+  return faceapi.resizeResults(results, { width, height })
 }

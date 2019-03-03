@@ -131,7 +131,7 @@ function createCube(scene) {
 }
 
 function createSkyBox(scene) {
-    var skybox = BABYLON.Mesh.CreateBox("skyBox", 3000.0, scene);
+    var skybox = BABYLON.Mesh.CreateBox("skyBox", 1024.0, scene);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
     skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(SKYBOX_IMAGES_PATH + "/skybox", scene);

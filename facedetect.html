@@ -2,52 +2,35 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
-    <title>RETATalks</title>
-
-    <!-- CSS  -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="css/facedetect.css?v1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.css">
 </head>
 
 <body>
-    <div class="section no-pad-bot" id="index-banner">
-        <div class="container center">
-            <h1 class="header center green-text">
-                <a href="/agenda.html">
-                    <img class="logo" src="/img/retatalks_logo.png"></img>
-                </a>
-            </h1>
+    <div id="navbar"></div>
+    <div class="center-content page-container">
 
-            <div class="row center title">
-                <h2 class="header col s12 green-text">FACE DETECT</h2>
-            </div>
+        <div class="progress" id="loader">
+            <div class="indeterminate"></div>
         </div>
-    </div>
-    <div class="container center">
-        <div class="section">
-            <select id="videoSelect"></select>
-            <div style="position: relative" class="margin">
-                <video onplay="onPlay(this)" id="player" autoplay muted></video>
-                <canvas id="overlay"></canvas>
-            </div>
-            <div id="elorriaga" class="jpanel" style="display:none">
-                Iñigo
-                <img src="/img/foca.gif" />
-            </div>
-            <div id="crosetti" class="jpanel" style="display: none">
-                crosetti
-                <img src="/img/bob.gif" />
-            </div>
+        <div style="position: relative" class="margin">
+            <video onplay="onPlay(this)" id="inputVideo" autoplay muted></video>
+            <canvas id="overlay" />
         </div>
-    </div>
 
-    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
-    <script src="js/lib/jquery-3.3.1.min.js"></script>
-    <script src="js/lib/face-api.js"></script>
-    <script src="js/facedetect.js?v1.0"></script>
-    <script>if (window.module) module = window.module;</script>
+        <div id="elorriaga" class="jpanel" style="display:none">
+            Iñigo
+            <img src="/img/foca.gif" />
+        </div>
+        <div id="crosetti" class="jpanel" style="display: none">
+            crosetti
+            <img src="/img/bob.gif" />
+        </div>
+
+        <script src="/js/lib/face-api.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="/js/facedetect.js"></script>
+</body>
 </body>
 
 </html>

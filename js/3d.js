@@ -1,6 +1,6 @@
-var SKYBOX_IMAGES_PATH = "/img/skybox";
-var LINK_PAGE_PATH = "/agenda.html";
-var CUBE_IMAGE_PATH = '/img/retatalks_logo.jpg';
+var SKYBOX_IMAGES_PATH = "https://webareaekasa.github.io/img/skybox";
+var LINK_PAGE_PATH = "agenda.html";
+var CUBE_IMAGE_PATH = 'https://webareaekasa.github.io/img/retatalks_logo.jpg';
 
 window.addEventListener('DOMContentLoaded', function () {
     // get the canvas DOM element

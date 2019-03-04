@@ -2,14 +2,33 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RETATalks</title>
+
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="css/facedetect.css">
 </head>
 
 <body>
-    <div id="navbar"></div>
-    <div class="center-content page-container">
 
+    <div class="section no-pad-bot" id="index-banner">
+        <div class="container center">
+            <h1 class="header center green-text">
+                <a href="agenda.html">
+                    <img class="logo" src="https://webareaekasa.github.io/img/retatalks_logo.png"></img>
+                </a>
+            </h1>
+
+            <div class="row center title">
+                <h2 class="header col s12 green-text">FACE DETECT</h2>
+            </div>
+        </div>
+    </div>
+    <div class="container">
         <div class="progress" id="loader">
             <div class="indeterminate"></div>
         </div>
@@ -26,11 +45,11 @@
             Crosetti
             <img src="https://webareaekasa.github.io/img/webdeveloper.gif" />
         </div>
+    </div>
 
-        <script src="/js/lib/face-api.js"></script>
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script src="/js/facedetect.js"></script>
-</body>
+    <script src="/js/lib/face-api.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="/js/facedetect.js"></script>
 </body>
 
 </html>

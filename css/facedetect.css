@@ -74,3 +74,27 @@
 #facesContainer canvas {
   margin: 10px;
 }
+
+.green-text {
+  color: #86a800 !important;
+}
+
+.logo {
+  width: 40%
+}
+
+.row.title {
+  width: 80%
+}
+
+.row {
+  margin-bottom: 0;
+}
+
+@media screen and (min-width:1250px) {
+   
+  .logo {
+      width: 20%;
+  }
+
+}

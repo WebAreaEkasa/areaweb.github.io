@@ -1,3 +1,10 @@
+h2 {
+  color: #86a800;
+  font-weight: 100;
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+
 .page-container {
   left: 0;
   right: 0;

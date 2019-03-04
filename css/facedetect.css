@@ -1,7 +1,7 @@
 h2 {
   color: #86a800;
   font-weight: 100;
-  font-size: 2rem;
+  font-size: 5rem;
   text-transform: uppercase;
 }
 
@@ -87,7 +87,7 @@ h2 {
 }
 
 .logo {
-  width: 40%
+  width: 60%
 }
 
 .row.title {
@@ -100,8 +100,12 @@ h2 {
 
 @media screen and (min-width:1250px) {
    
+  h2 {
+    font-size: 2rem;
+  }
+
   .logo {
-      width: 20%;
+    width: 40%
   }
 
 }

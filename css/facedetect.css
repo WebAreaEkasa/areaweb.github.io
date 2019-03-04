@@ -78,6 +78,10 @@ h2 {
   left: 0;
 }
 
+.logo {
+  width: 40%
+}
+
 #facesContainer canvas {
   margin: 10px;
 }

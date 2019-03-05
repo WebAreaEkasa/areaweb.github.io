@@ -9,9 +9,6 @@ h2 {
   left: 0;
   right: 0;
   margin: auto;
-  margin-top: 20px;
-  padding-left: 280px;
-  display: inline-flex !important;
 }
 
 @media only screen and (max-width : 992px) {
@@ -33,6 +30,7 @@ h2 {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  width: 70%
 }
 
 .side-by-side {

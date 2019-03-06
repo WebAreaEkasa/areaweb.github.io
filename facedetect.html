@@ -24,24 +24,31 @@
         <div class="progress" id="loader">
             <div class="indeterminate"></div>
         </div>
-        <div style="position: relative" class="margin">
-            <video onplay="onPlay(this)" id="inputVideo" autoplay muted></video>
-            <canvas id="overlay" />
-        </div>
+        
+        <div class="row">
+            <div style="position: relative" class="margin col s12 m6 l6 xl6">
+                <video onplay="onPlay(this)" id="inputVideo" autoplay muted></video>
+                <canvas id="overlay" />
+            </div>
 
-        <div id="elorriaga" class="jpanel" style="text-align: center; display: none">
-            <h3>Iñigo</h3>
-            <img src="https://webareaekasa.github.io/img/webdeveloper.gif" />
+            <div class="col s12 m12 l4 xl4">
+                <div class="row">
+                    <div id="elorriaga" class="jpanel col offset-l4" style="display: none" class="col m6">
+                        <h3>Iñigo</h3>
+                        <img src="https://webareaekasa.github.io/img/webdeveloper.gif" class="responsive-img" />
+                    </div>
+                    <div id="crosetti" class="jpanel col offset-l4" style="display: none" class="col m6">
+                        <h3>Daniele</h3>
+                        <img src="https://webareaekasa.github.io/img/webdeveloper.gif" class="responsive-img" />
+                    </div>    
+                </div>
+            </div>
         </div>
-        <div id="crosetti" class="jpanel" style="text-align: center; display: none">
-            <h3>Daniele</h3>
-            <img src="https://webareaekasa.github.io/img/webdeveloper.gif" />
-        </div>
-
+        
+        <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
         <script src="/js/lib/face-api.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script src="/js/facedetect.js"></script>
-</body>
 </body>
 
 </html>

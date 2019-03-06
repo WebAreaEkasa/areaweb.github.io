@@ -4,6 +4,10 @@ const MTCNN = 'mtcnn'
 
 let selectedFaceDetector = TINY_FACE_DETECTOR
 
+if(isElectron()){
+  selectedFaceDetector = SSD_MOBILENETV1;
+}
+
 // ssd_mobilenetv1 options
 let minConfidence = 0.5
 
@@ -162,4 +166,13 @@ function resizeCanvasAndResults(dimensions, canvas, results) {
   // resize detections (and landmarks) in case displayed image is smaller than
   // original size
   return faceapi.resizeResults(results, { width, height })
+}
+
+function isElectron(){
+  var outcome = false;
+  var userAgent = navigator.userAgent.toLowerCase();
+  if (userAgent.indexOf(' electron/') > -1) {
+     outcome = true;
+  }
+  return outcome;
 }
